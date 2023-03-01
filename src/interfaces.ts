@@ -17,3 +17,10 @@ export interface IVariables {
     type: string;
     initialValue: any;
 }
+
+//Datatypes for `Weather` component
+export interface IUpcomming {
+    day: string;
+    condition: string;
+    conditionName: string;
+}
