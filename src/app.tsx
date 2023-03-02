@@ -3,15 +3,9 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import { IComponents, ILists, IVariables } from './interfaces';
+import { IComponents, IPageSettings, IVariables } from './interfaces';
 import ListWrapper from './components/ListWrapper';
 import NotFound from './components/NotFound';
-
-interface IPageSettings {
-    components: Array<IComponents>;
-    lists: Array<ILists>;
-    variables?: Array<IVariables>;
-}
 
 const App = () => {
     const { id } = useParams<{ id: string }>();
@@ -20,14 +14,19 @@ const App = () => {
         lists: [],
     });
     const [pageError, setPageError] = useState(false);
+    const [conditionChildren, setConditionChildren] = useState([]);
 
+    // Sets page settings from API response on page load
     useEffect(() => {
-        // Set page settings from API response on page load
         const fetchPageSettings = async () => {
             try {
                 const res = await axios(`${process.env.REACT_APP_API_URL}/page/${id}`);
                 const data = res.data.data;
+                const conditionComponents = data.components.filter((d: IComponents) => d.type === 'condition');
+                const children = conditionComponents.map((c : IComponents) => c.children);
+
                 setPageSettings(data);
+                setConditionChildren(children);
             } catch(error) {
                 setPageError(true);
             }
@@ -36,6 +35,21 @@ const App = () => {
         fetchPageSettings();
     }, [id]);
 
+    // Formats variables into easily accessible format for child components
+    const formatVariables = (variables: Array<IVariables> | undefined) => {
+        let formattedVariables = {};
+
+        if (variables) {
+            // Turns array of variables into formatted object
+            formattedVariables = variables.reduce((obj: { [key: string]: string }, v) => {
+                obj[v.name] = v.initialValue;
+                return obj;
+            }, {});
+        }
+
+        return formattedVariables;
+    };
+
     // Renders specified components for each list item
     return (
         <Container>
@@ -43,7 +57,10 @@ const App = () => {
                 <ListWrapper
                     key={listItem.id}
                     list={listItem}
-                    components={pageSettings.components}
+                    pageSettings={pageSettings}
+                    conditionChildren={conditionChildren}
+                    variables={formatVariables(pageSettings.variables)}
+                    updatePageSettings={(settings: IPageSettings) => setPageSettings(settings)}
                 />
             )) : <NotFound />}
         </Container>

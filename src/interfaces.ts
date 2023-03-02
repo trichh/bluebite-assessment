@@ -5,6 +5,7 @@ export interface IComponents {
     options: {
         [key: string]: any;
     };
+    children?: number;
 }
 
 export interface ILists {
@@ -16,6 +17,12 @@ export interface IVariables {
     name: string;
     type: string;
     initialValue: any;
+}
+
+export interface IPageSettings {
+    components: Array<IComponents>;
+    lists: Array<ILists>;
+    variables?: Array<IVariables>;
 }
 
 //Datatypes for `Weather` component

@@ -43,6 +43,18 @@ const Weather = ({ options }: IProps) => {
 
         fetchWeatherData()
             .catch(console.error);
+
+        // Unmount `Weather` component logic
+        return () => {
+            setWeatherData({
+                condition: '',
+                conditionName: '',
+                location: '',
+                temperature: 0,
+                unit: '',
+                upcomming: [],
+            });
+        };
     }, [lat, lon]);
 
     return (

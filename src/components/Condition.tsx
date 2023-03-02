@@ -1,57 +1,50 @@
 import React from 'react';
 
-import { ILists, IPageSettings } from '../interfaces';
+import { IPageSettings } from '../interfaces';
 import * as ComponentList from '../componentList';
 
 interface IProps {
-    list: ILists;
+    children: Array<number>;
+    options: {
+        variable: string;
+        value: any;
+    };
     pageSettings: IPageSettings;
-    conditionChildren: Array<number>;
     variables: { [key: string]: any };
     updatePageSettings: any;
 }
 
-const ListWrapper = ({
-    list,
+const Condition = ({
+    children,
+    options,
     pageSettings,
-    conditionChildren,
     variables,
-    updatePageSettings ,
+    updatePageSettings
 }: IProps) => {
     const componentlist: { [key: string]: any } = ComponentList;
+    const { value, variable } = options;
     const { components } = pageSettings;
 
-    // Renders each component in the current list that aren't child lists
+    // Renders each child component for the current condition
     return (
         <>
-            {!conditionChildren.includes(list.id) && list.components.map(componentId => {
-                const component = components.find(c => c.id === componentId);
+            {variables[variable] === value && children.map(child => {
+                const component = components.find(c => c.id === child);
 
                 if (component) {
                     // Selects which component to render from the list
                     const Component = componentlist[component.type];
-                    let childComponents;
 
-                    if (Component) {
-                        // Finds children components for the `condition` component to render
-                        if (component.type === 'condition') {
-                            const childList = pageSettings.lists.find(l => l.id === component.children);
-
-                            if (childList)
-                                childComponents = childList.components;
-                        }
-
+                    if (Component)
                         return (
                             <Component
-                                key={componentId}
-                                children={childComponents}
+                                key={child}
                                 options={component.options}
                                 variables={variables}
                                 pageSettings={pageSettings}
                                 updatePageSettings={updatePageSettings}
                             />
                         )
-                    }
                 }
 
                 // Render blank component by default if none found
@@ -61,4 +54,4 @@ const ListWrapper = ({
     );
 };
 
-export default ListWrapper;
+export default Condition;
