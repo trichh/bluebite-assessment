@@ -20,7 +20,8 @@ const ListWrapper = ({ list, components }: IProps) => {
                 if (component) {
                     // Selects which component to render from the list
                     const Component = componentlist[component.type];
-                    return <Component key={componentId} options={component.options} />
+                    if (Component)
+                        return <Component key={componentId} options={component.options} />
                 }
 
                 // Render blank component by default if none found
