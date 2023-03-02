@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { IComponents, ILists, IVariables } from './interfaces';
 import ListWrapper from './components/ListWrapper';
+import NotFound from './components/NotFound';
 
 interface IPageSettings {
     components: Array<IComponents>;
@@ -18,29 +19,33 @@ const App = () => {
         components: [],
         lists: [],
     });
+    const [pageError, setPageError] = useState(false);
 
     useEffect(() => {
         // Set page settings from API response on page load
         const fetchPageSettings = async () => {
-            const res = await axios(`${process.env.REACT_APP_API_URL}/page/${id}`);
-            const data = res.data.data;
-            setPageSettings(data);
+            try {
+                const res = await axios(`${process.env.REACT_APP_API_URL}/page/${id}`);
+                const data = res.data.data;
+                setPageSettings(data);
+            } catch(error) {
+                setPageError(true);
+            }
         };
 
-        fetchPageSettings()
-            .catch(console.error);
+        fetchPageSettings();
     }, [id]);
 
     // Renders specified components for each list item
     return (
         <Container>
-            {pageSettings.lists.map(listItem => (
+            {!pageError ? pageSettings.lists.map(listItem => (
                 <ListWrapper
                     key={listItem.id}
                     list={listItem}
                     components={pageSettings.components}
                 />
-            ))}
+            )) : <NotFound />}
         </Container>
     );
 };
