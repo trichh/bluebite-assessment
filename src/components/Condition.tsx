@@ -11,7 +11,7 @@ interface IProps {
     };
     pageSettings: IPageSettings;
     variables: { [key: string]: any };
-    updatePageSettings: any;
+    updatePageSettings: Function;
 }
 
 const Condition = ({
@@ -23,7 +23,7 @@ const Condition = ({
 }: IProps) => {
     const { value, variable } = options;
 
-    // Renders each child component for the current condition
+    // Render each child component for the current condition
     return (
         <>
             {variables[variable] === value && (

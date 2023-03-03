@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+// Styling for `Weather` component
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;

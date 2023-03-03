@@ -7,7 +7,7 @@ interface IProps {
     components: Array<number>;
     pageSettings: IPageSettings;
     variables: { [key: string]: any };
-    updatePageSettings: any;
+    updatePageSettings: Function;
 }
 
 const ComponentWrapper = ({
@@ -17,13 +17,13 @@ const ComponentWrapper = ({
     updatePageSettings
 } : IProps) => {
     // List of all available components for rendering
-    const componentlist: { [key: string]: any } = ComponentList;
+    const componentlist: { [key: string]: Function } = ComponentList;
 
-    // Renders all available components passed to it
+    // Render all available components passed in
     return (
         <>
             {components.map(componentId => {
-                // Selects current component from page settings
+                // Select current component from page settings
                 const component = pageSettings.components.find(c => c.id === componentId);
 
                 if (component) {
@@ -32,7 +32,7 @@ const ComponentWrapper = ({
                     let childComponents;
 
                     if (Component) {
-                        // Finds children components for the `condition` component to render
+                        // Find children components for the `condition` component to render
                         if (component.type === 'condition') {
                             const childList = pageSettings.lists.find(l => l.id === component.children);
 
@@ -45,8 +45,8 @@ const ComponentWrapper = ({
                                 key={componentId}
                                 children={childComponents}
                                 options={component.options}
-                                variables={variables}
                                 pageSettings={pageSettings}
+                                variables={variables}
                                 updatePageSettings={updatePageSettings}
                             />
                         )

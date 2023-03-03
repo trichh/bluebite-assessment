@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
+// Render 404 error message if page API errors
 const NotFound = () => {
     return (
         <Wrapper>
@@ -36,8 +37,8 @@ const Text = styled.p`
 
 const Button = styled.button`
     background-color: #eeeeee;
-    border: 2px solid #5C99E7;
-    color: #5C99E7;
+    border: 2px solid #2e71f0;
+    color: #2e71f0;
     padding: 10px 14px;
     font-size: 16px;
     cursor: pointer;

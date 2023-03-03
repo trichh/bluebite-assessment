@@ -19,7 +19,7 @@ const Image = ({ options }: IProps) => {
 };
 
 const Wrapper = styled.div<IImage>`
-    background: url(${({src}) => src}) center/100% 100% no-repeat #ffffff;
+    background: url(${({src}) => src}) center/100% 100% no-repeat #2e71f0;
 `;
 
 export default Image;

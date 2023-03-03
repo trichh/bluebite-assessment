@@ -16,7 +16,7 @@ const App = () => {
     const [pageError, setPageError] = useState(false);
     const [conditionChildren, setConditionChildren] = useState([]);
 
-    // Sets page settings from API response on page load
+    // Set page settings from API response on page load
     useEffect(() => {
         const fetchPageSettings = async () => {
             try {
@@ -35,12 +35,12 @@ const App = () => {
         fetchPageSettings();
     }, [id]);
 
-    // Formats variables into easily accessible format for child components
+    // Convert variables into easily accessible format for child components
     const formatVariables = (variables: Array<IVariables> | undefined) => {
         let formattedVariables = {};
 
         if (variables) {
-            // Turns array of variables into formatted object
+            // Turn array of variables into formatted object
             formattedVariables = variables.reduce((obj: { [key: string]: string }, v) => {
                 obj[v.name] = v.initialValue;
                 return obj;
@@ -50,15 +50,15 @@ const App = () => {
         return formattedVariables;
     };
 
-    // Renders specified components for each list item
+    // Render specified components for each list item
     return (
         <Container>
             {!pageError ? pageSettings.lists.map(listItem => (
                 <ListWrapper
                     key={listItem.id}
+                    conditionChildren={conditionChildren}
                     list={listItem}
                     pageSettings={pageSettings}
-                    conditionChildren={conditionChildren}
                     variables={formatVariables(pageSettings.variables)}
                     updatePageSettings={(settings: IPageSettings) => setPageSettings(settings)}
                 />

@@ -14,14 +14,14 @@ interface IProps {
     };
     pageSettings: IPageSettings;
     variables: { [key: string]: any };
-    updatePageSettings: any;
+    updatePageSettings: Function;
 }
 
 const Button = ({ options, pageSettings, variables, updatePageSettings }: IProps) => {
     const { text, value, variable } = options;
     const icons: { [key: string]: string } = { hide, show, location };
 
-    // Updates variable state
+    // Update current variable state on button click
     const updateVariable = () => {
         const newSettings = structuredClone(pageSettings);
         const newVariable = newSettings.variables.find((v: IVariables) => v.name === variable);
