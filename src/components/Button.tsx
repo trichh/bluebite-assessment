@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { IPageSettings, IVariables } from '../interfaces';
 import hide from '../icons/hide.svg';
 import show from '../icons/show.svg';
+import location from '../icons/location.svg';
 
 interface IProps {
     options: {
@@ -18,26 +19,24 @@ interface IProps {
 
 const Button = ({ options, pageSettings, variables, updatePageSettings }: IProps) => {
     const { text, value, variable } = options;
-    const icons: { [key: string]: string } = { hide, show };
-    const valueOptions = ['show', 'hide'];
+    const icons: { [key: string]: string } = { hide, show, location };
 
-    // Updates `show_weather` variable
-    const updateWeatherView = () => {
+    // Updates variable state
+    const updateVariable = () => {
         const newSettings = structuredClone(pageSettings);
         const newVariable = newSettings.variables.find((v: IVariables) => v.name === variable);
-        const newValue = valueOptions.find(option => option !== newVariable.initialValue);
 
-        newVariable.initialValue = newValue;
+        newVariable.initialValue = value;
         updatePageSettings(newSettings);
     };
 
     return (
         <>
             {variables[variable] !== value && (
-                <Wrapper className="ComponentWrapper" onClick={updateWeatherView}>
+                <Wrapper className="ComponentWrapper" onClick={updateVariable}>
                     <Text>{text}</Text>
                     <Icon
-                        src={icons[value]}
+                        src={icons[value] || icons['location']}
                         alt={`${text} icon`}
                         width={45}
                         height={45}

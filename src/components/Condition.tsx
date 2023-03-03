@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IPageSettings } from '../interfaces';
-import * as ComponentList from '../componentList';
+import ComponentWrapper from './ComponentWrapper';
 
 interface IProps {
     children: Array<number>;
@@ -21,35 +21,19 @@ const Condition = ({
     variables,
     updatePageSettings
 }: IProps) => {
-    const componentlist: { [key: string]: any } = ComponentList;
     const { value, variable } = options;
-    const { components } = pageSettings;
 
     // Renders each child component for the current condition
     return (
         <>
-            {variables[variable] === value && children.map(child => {
-                const component = components.find(c => c.id === child);
-
-                if (component) {
-                    // Selects which component to render from the list
-                    const Component = componentlist[component.type];
-
-                    if (Component)
-                        return (
-                            <Component
-                                key={child}
-                                options={component.options}
-                                variables={variables}
-                                pageSettings={pageSettings}
-                                updatePageSettings={updatePageSettings}
-                            />
-                        )
-                }
-
-                // Render blank component by default if none found
-                return <></>
-            })}
+            {variables[variable] === value && (
+                <ComponentWrapper
+                    components={children}
+                    pageSettings={pageSettings}
+                    variables={variables}
+                    updatePageSettings={updatePageSettings}
+                />
+            )}
         </>
     );
 };
